@@ -1,4 +1,3 @@
 lol-wave
 ========
-
-Small webapp for league of legends. 
+Small webapp for league of legends.
