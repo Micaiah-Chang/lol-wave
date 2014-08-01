@@ -53,3 +53,5 @@ coverage.xml
 docs/_build/
 /LoL_project/LoL_project/secret_key.txt
 /LoL_project/LoL_project/API.txt
+/root/wave/API.txt
+/root/root/secret_key.txt
