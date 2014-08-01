@@ -81,8 +81,8 @@ STATICFILES_FINDERS = (
 )
 
 # Make this unique, and don't share it with anybody.
-KEY_DIR = os.path.join(SETTINGS_DIR, 'secret_key.txt')
-with open(KEY_DIR, 'r') as f:
+KEY_FILE = os.path.join(SETTINGS_DIR, 'secret_key.txt')
+with open(KEY_FILE, 'r') as f:
     SECRET_KEY = f.readline()
 
 # SECRET_KEY = "READ THIS FROM FILE HOLY CRAP"
