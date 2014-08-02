@@ -18,7 +18,7 @@
 	<div class="container-fluid">
 	  <form class="form-signin span8" method="post" id="user_form" action="/wave/">
 		{% csrf_token %}
-		<input type="text" name="quey" value="" id="query" size="50"/>
+		<input type="text" name="query" value="" id="query" size="50"/>
 		<input class="btn btn-primary" type="submit" name="submit" value="Search" />
 		<br />
 	  </form>
@@ -28,7 +28,7 @@
 		  <ol>
 			{% for result in result_list %}
 			  <li>
-				<strong>Hi</strong>
+				<strong>{{ result }} </strong>
 			  </li>
 		    {% endfor %}
 		  </ol>
