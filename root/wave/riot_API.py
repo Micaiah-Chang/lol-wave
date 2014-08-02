@@ -45,6 +45,46 @@ def get_version():
 
     return version
 
+def latest_game(id):
+    root_url = "https://na.api.pvp.net/api/lol/na/v1.3/game/by-summoner/{0}/recent".format(id)
+
+    url = append_API_key(root_url)
+
+    try:
+        response = urllib2.urlopen(url).read()
+        json_response = json.loads(response)
+
+        result = parse_summoner_json(json_response)
+        print result
+    except urllib2.URLError, e:
+        print "Where was team", e
+
+    return None
+
+
+def parse_summoner_json(json_response):
+    result = {}
+    last_game = json_response['games'][0]
+    recent_stats = last_game['stats']
+
+    # Refactor below to be dict comprehension kthx
+
+    wards_placed = recent_stats["wardPlaced"]
+    result["w_placed"] = wards_placed
+
+    wards_killed = recent_stats["wardKilled"]
+    result["w_kills"] = wards_killed
+
+    damage_took = recent_stats["totalDamageTaken"]
+    result["d_took"] = damage_took
+
+    damage_dealt = recent_stats["totalDamageDealt"]
+    result["d_dealt"] = damage_dealt
+
+    return result
+
+
+
 def append_API_key(url):
     curr_dir = os.path.dirname(__file__)
     curr_dir = os.path.abspath(curr_dir)
