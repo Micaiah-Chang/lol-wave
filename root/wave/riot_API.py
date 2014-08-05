@@ -1,6 +1,7 @@
 import json
 import urllib, urllib2
 import os
+import time
 
 # Warning! Currently region is only set to NA!
 
@@ -45,44 +46,72 @@ def get_version():
 
     return version
 
-def latest_game(id):
+def get_stat_with_id(id, teammates=False):
     root_url = "https://na.api.pvp.net/api/lol/na/v1.3/game/by-summoner/{0}/recent".format(id)
+
+    url = append_API_key(root_url)
+    results = []
+    try:
+        response = urllib2.urlopen(url).read()
+        json_response = json.loads(response)
+
+        # print json.dumps(json_response, sort_keys=True, indent=4, separators=(',', ': '))
+
+        game = get_game(json_response)
+        result = get_game_stats(game)
+    except urllib2.URLError, e:
+        print "Where was team", e
+
+    if teammates:
+        return result
+    else:
+        return result, game
+
+
+def get_game(json_response, game_id=0):
+    if not game_id:
+        game = json_response['games'][0]
+    else:
+        game = match_game_id(json_response['games'], game_id)
+
+    return game
+
+def get_game_stats(game):
+    recent_stats = game['stats']
+    stats = [u"totalDamageTaken",  u"totalDamageDealtToChampions", u"wardPlaced",u"wardKilled"]
+    result_dict = {stat: recent_stats.get(stat, 0) for stat in stats}
+    # The above assumes all relevant stats which can be NULL in the json are numerical ones.
+
+    return result_dict
+
+
+
+# look through games for the matching id.
+def match_game_id(games, game_id):
+    for games_index, game in games:
+        if game['id'] == game_id:
+            return games[game_index]
+
+    return {} # if not seen in latest, return nothing.
+
+def get_teammates(game):
+    players = game["fellowPlayers"]
+
+    teammate_ids = [str(player["summonerId"]) for player in players]
+
+    id_delimit = ",".join(teammate_ids)
+    root_url = "https://na.api.pvp.net/api/lol/na/v1.4/summoner/{0}/name".format(id_delimit)
 
     url = append_API_key(root_url)
 
     try:
         response = urllib2.urlopen(url).read()
         json_response = json.loads(response)
-
-        result = parse_summoner_json(json_response)
-        print result
+        teammates = json_response
     except urllib2.URLError, e:
-        print "Where was team", e
+        print "Cannot access riot API", e
 
-    return None
-
-
-def parse_summoner_json(json_response):
-    result = {}
-    last_game = json_response['games'][0]
-    recent_stats = last_game['stats']
-
-    # Refactor below to be dict comprehension kthx
-
-    wards_placed = recent_stats["wardPlaced"]
-    result["w_placed"] = wards_placed
-
-    wards_killed = recent_stats["wardKilled"]
-    result["w_kills"] = wards_killed
-
-    damage_took = recent_stats["totalDamageTaken"]
-    result["d_took"] = damage_took
-
-    damage_dealt = recent_stats["totalDamageDealt"]
-    result["d_dealt"] = damage_dealt
-
-    return result
-
+    return teammates
 
 
 def append_API_key(url):
@@ -98,5 +127,15 @@ def append_API_key(url):
 
 
 if __name__ == '__main__':
-    s_id = get_id("meisnewbie")
-    latest_game(s_id)
+    summoner = "meisnewbie"
+    s_id = get_id(summoner)
+    result, game = get_stat_with_id(s_id)
+    teammates = get_teammates(game)
+    results = [(summoner, result)]
+
+    for (teammate_id, teammate_name) in teammates.items():
+        time.sleep(1) # work around rate limit
+        stat = get_stat_with_id(teammate_id, teammates=True)
+        results.append((teammate_name , stat))
+
+    print results
