@@ -23,14 +23,10 @@
 		<br />
 	  </form>
 
-	  {% if result_list %}
+	  {% if id %}
 		<div style="clear:both;">
 		  <ol>
-			{% for result in result_list %}
-			  <li>
-				<strong>{{ result }} </strong>
-			  </li>
-		    {% endfor %}
+			<strong>{{ id }} </strong>
 		  </ol>
 		</div>
 	  {% endif %}
