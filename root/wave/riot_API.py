@@ -131,7 +131,7 @@ def get_team_data(name):
     teammates = get_teammates(game)
     results = [(name, result)]
 
-    for (teammate_id, teammate_name) in teammates.items():
+    for (teammate_id, teammate_name) in teammates.iteritems():
         time.sleep(1)
         stat = get_stat_with_id(teammate_id, teammates=True)
         results.append((teammate_name, stat))
