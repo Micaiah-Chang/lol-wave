@@ -15,6 +15,7 @@ def index(request):
         name, stats = results.pop(0)
         team = [(t_name, zip(t_stats.keys(), t_stats.values())) for t_name, t_stats in results]
         context_dict['name'] = name
+        context_dict['stats'] = stats
         context_dict['teammates'] = team
 
 
