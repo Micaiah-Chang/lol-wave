@@ -125,17 +125,26 @@ def append_API_key(url):
     result_url = "{0}?api_key={1}".format(url ,API_key)
     return result_url
 
-
-if __name__ == '__main__':
-    summoner = "meisnewbie"
-    s_id = get_id(summoner)
+def get_team_data(name):
+    s_id = get_id(name)
     result, game = get_stat_with_id(s_id)
     teammates = get_teammates(game)
-    results = [(summoner, result)]
+    results = [(name, result)]
 
     for (teammate_id, teammate_name) in teammates.items():
-        time.sleep(1) # work around rate limit
+        time.sleep(1)
         stat = get_stat_with_id(teammate_id, teammates=True)
-        results.append((teammate_name , stat))
+        results.append((teammate_name, stat))
 
-    print results
+    return results
+
+
+def main():
+    summoner_name = "meisnewbie"
+    results = get_team_data(summoner_name)
+    summoner_stats = results.pop(0)
+    name, stats = summoner_stats
+
+
+if __name__ == '__main__':
+    main()
