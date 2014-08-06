@@ -5,14 +5,17 @@
 
 {% block body_block %}
 
-  <h1>Hello World!</h1>
-  {% if version %}   League of Legends is currently on patch {{ version }} {{ one }} <br />
-  {% else %}
-  No patch version available. {{ moo }}
-  {% endif %}
+  <h1>Welcome to LoL Wave!</h1>
+  <div class="navbar navbar_inverse navbar-fixed-top">
+	{% if version %}
+	  League of Legends is currently on patch {{ version }} {{ one }} <br />
+	{% else %}
+      No patch version available.
+	{% endif %}
+  </div>
 
   <div class="hero-unit">
-	<h1>Look up a summoner!</h1>
+	<h2>Look up a summoner!</h2>
 	<br />
 
 	<div class="container-fluid">
