@@ -23,11 +23,22 @@
 		<br />
 	  </form>
 
-	  {% if id %}
+	  {% if name %}
 		<div style="clear:both;">
-		  <ol>
-			<strong>{{ id }} </strong>
-		  </ol>
+			You are currently looking up summoner <strong>{{ name }}. </strong> <br />
+			He recently played a game with the following players:
+			{% if teammates %}
+			  <ol>
+				{% for name, stats in teammates %}
+				  <li> {{ name }} </li>
+				  <ul>
+					{% for s_name, s_val in stats %}
+					  <li> {{ s_name }}: {{ s_val }}  </li>
+					{% endfor %}
+				  </ul>
+			    {% endfor %}
+			  </ol>
+		    {% endif %}
 		</div>
 	  {% endif %}
 	</div>
