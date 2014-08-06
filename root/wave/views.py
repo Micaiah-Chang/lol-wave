@@ -12,11 +12,20 @@ def index(request):
     if request.method == 'POST':
         summoner_name = request.POST['query'].strip()
         results = get_team_data(summoner_name)
-        name, stats = results.pop(0)
-        team = [(t_name, zip(t_stats.keys(), t_stats.values())) for t_name, t_stats in results]
-        context_dict['name'] = name
-        context_dict['stats'] = stats
-        context_dict['teammates'] = team
+        context_dict, team_list = add_player_to_context(context_dict, results)
+        context_dict = add_team_to_context(context_dict, team_list)
 
 
     return render_to_response("wave/index.html", context_dict, context)
+
+
+def add_player_to_context(context_dict, player_list):
+    name, stats = player_list.pop(0)
+    context_dict['name'] = name
+    context_dict['stats'] = stats
+    return context_dict, player_list
+
+
+def add_team_to_context(context_dict, team_list):
+    team = [(t_name, zip(t_stats.keys(), t_stats.values())) for t_name, t_stats in team_list]
+    context_dict['teammates'] = team
