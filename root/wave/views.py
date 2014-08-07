@@ -1,7 +1,9 @@
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 
-from wave.riot_API import get_version, get_team_data
+from wave.models import Summoner
+
+from wave.riot_API import get_version, get_team_data, get_id
 
 
 def index(request):
@@ -11,7 +13,15 @@ def index(request):
     context_dict = {'version': version}
     if request.method == 'POST':
         summoner_name = request.POST['query'].strip()
-        results = get_team_data(summoner_name)
+        if summoner_in_cache(summoner_name):
+            summoner = Summoner.objects.get(username=summoner_name)
+            s_id = summoner.id
+        else:
+            s_id = get_id(summoner_name)
+            s = Summoner(user_id=s_id, name=summoner_name)
+            s.save()
+
+        results = get_team_data(s_id, summoner_name)
         context_dict, team_list = add_player_to_context(context_dict, results)
         context_dict = add_team_to_context(context_dict, team_list)
 
@@ -29,3 +39,10 @@ def add_player_to_context(context_dict, player_list):
 def add_team_to_context(context_dict, team_list):
     team = [(t_name, zip(t_stats.keys(), t_stats.values())) for t_name, t_stats in team_list]
     context_dict['teammates'] = team
+
+def summoner_in_cache(name):
+    try:
+        Summoner.object.get(user=name)
+        return True
+    except:
+        return False
