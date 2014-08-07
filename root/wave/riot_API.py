@@ -125,8 +125,7 @@ def append_API_key(url):
     result_url = "{0}?api_key={1}".format(url ,API_key)
     return result_url
 
-def get_team_data(name):
-    s_id = get_id(name)
+def get_team_data(s_id, name):
     result, game = get_stat_with_id(s_id)
     teammates = get_teammates(game)
     results = [(name, result)]
@@ -141,7 +140,8 @@ def get_team_data(name):
 
 def main():
     summoner_name = "meisnewbie"
-    results = get_team_data(summoner_name)
+    s_id = get_id(summoner_name)
+    results = get_team_data(s_id, summoner_name)
     summoner_stats = results.pop(0)
     name, stats = summoner_stats
 
