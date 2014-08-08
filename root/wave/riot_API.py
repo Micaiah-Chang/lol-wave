@@ -50,7 +50,7 @@ def get_stat_with_id(id, teammates=False):
     root_url = "https://na.api.pvp.net/api/lol/na/v1.3/game/by-summoner/{0}/recent".format(id)
 
     url = append_API_key(root_url)
-    results = []
+    result = []
     try:
         response = urllib2.urlopen(url).read()
         json_response = json.loads(response)
@@ -131,7 +131,7 @@ def get_team_data(s_id, name):
     results = [(name, result)]
 
     for (teammate_id, teammate_name) in teammates.iteritems():
-        time.sleep(1)
+        time.sleep(1.2)
         stat = get_stat_with_id(teammate_id, teammates=True)
         results.append((teammate_name, stat))
 
