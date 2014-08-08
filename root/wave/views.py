@@ -39,6 +39,7 @@ def add_player_to_context(context_dict, player_list):
 def add_team_to_context(context_dict, team_list):
     team = [(t_name, zip(t_stats.keys(), t_stats.values())) for t_name, t_stats in team_list]
     context_dict['teammates'] = team
+    return context_dict
 
 def summoner_in_cache(name):
     try:
