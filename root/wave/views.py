@@ -41,6 +41,20 @@ def add_team_to_context(context_dict, team_list):
     context_dict['teammates'] = team
     return context_dict
 
+def max_stat_to_context(context_dict, all_team):
+    most_damage = sorted(all_team, key=lambda x: x[1]['totalDamageDealtToChampions'])[0][0]
+    context_dict['most_damage_dealt'] = most_damage
+
+    most_damage_taken = sorted(all_team, key=lambda x:
+                               x[1]['totalDamageTaken'])[0][0]
+    context_dict['most_damage_taken'] = most_damage_taken
+
+    most_wards_placed = sorted(all_team, key=lambda x: x[1]['wardPlaced'], reverse=True)[0][0]
+    context_dict['most_wards_placed'] = most_wards_placed
+    return context_dict
+
+
+
 def summoner_in_cache(name):
     try:
         Summoner.object.get(user=name)

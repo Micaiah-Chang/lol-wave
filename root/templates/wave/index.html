@@ -28,9 +28,12 @@
 
 	  {% if name %}
 		<div style="clear:both;">
-			You are currently looking up summoner <strong>{{ name }}. </strong> <br />
-			He recently played a game with the following players:
 			{% if teammates %}
+			  <strong>Who did the damage?</strong> It was: {{ most_damage_dealt }} <br />
+			  <strong>Who took the damage?</strong> It was: {{ most_damage_taken }} <br />
+			  <strong>Who placed the wards?</strong> It was: {{ most_wards_placed }} <br />
+			  You are currently looking up summoner <strong>{{ name }}. </strong> <br />
+			He recently played a game with the following players:
 			  <ol>
 				{% for name, stats in teammates %}
 				  <li> {{ name }} </li>
