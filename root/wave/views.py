@@ -13,18 +13,19 @@ def index(request):
     context_dict = {'version': version}
     if request.method == 'POST':
         summoner_name = request.POST['query'].strip()
-        if summoner_in_cache(summoner_name):
-            summoner = Summoner.objects.get(username=summoner_name)
-            s_id = summoner.id
-        else:
-            s_id = get_id(summoner_name)
-            s = Summoner(user_id=s_id, name=summoner_name)
-            s.save()
-
+        # if summoner_in_cache(summoner_name):
+        #     summoner = Summoner.objects.get(username=summoner_name)
+        #     s_id = summoner.id
+        # else:
+        #     s_id = get_id(summoner_name)
+        #     s = Summoner(user_id=s_id, name=summoner_name)
+        #     s.save()
+        s_id = get_id(summoner_name)
         results = get_team_data(s_id, summoner_name)
+
         context_dict, team_list = add_player_to_context(context_dict, results)
         context_dict = add_team_to_context(context_dict, team_list)
-
+        context_dict = max_stat_to_context(context_dict, results)
 
     return render_to_response("wave/index.html", context_dict, context)
 
